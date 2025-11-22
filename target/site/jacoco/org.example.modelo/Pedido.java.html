@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Pedido.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pc02-is3</a> &gt; <a href="index.source.html" class="el_package">org.example.modelo</a> &gt; <span class="el_source">Pedido.java</span></div><h1>Pedido.java</h1><pre class="source lang-java linenums">package org.example.modelo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Pedido {
+    private final List&lt;Producto&gt; detallesPedido;
+
+<span class="fc" id="L10">    public Pedido() {</span>
+<span class="fc" id="L11">        this.detallesPedido = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L12">    }</span>
+
+    public List&lt;Producto&gt; getDetallesPedido() {
+<span class="fc" id="L15">        return Collections.unmodifiableList(detallesPedido);</span>
+    }
+
+    public boolean agregarProducto(Producto producto, int cantidad) {
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        if (producto == null) {</span>
+<span class="nc" id="L20">            System.err.println(&quot;Error: Producto vacio&quot;);</span>
+<span class="nc" id="L21">            return false;</span>
+        }
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (cantidad &lt;= 0) {</span>
+<span class="fc" id="L24">            System.err.println(&quot;Error: La cantidad a agregar debe ser positiva&quot;);</span>
+<span class="fc" id="L25">            return false;</span>
+        }
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (!producto.isEsActivo()) {</span>
+<span class="fc" id="L28">            System.err.println(&quot;Error: No se puede agregar un producto inactivo&quot;);</span>
+<span class="fc" id="L29">            return false;</span>
+        }
+<span class="pc bpc" id="L31" title="2 of 4 branches missed.">        if (producto.getSku() == null || producto.getSku().trim().isEmpty()) {</span>
+<span class="nc" id="L32">            System.err.println(&quot;Error: Producto sin sku&quot;);</span>
+<span class="nc" id="L33">            return false;</span>
+        }
+<span class="fc" id="L35">        boolean productoYaExiste = detallesPedido.stream()</span>
+<span class="fc" id="L36">                .anyMatch(p -&gt; p.getSku().equals(producto.getSku()));</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (productoYaExiste) {</span>
+<span class="fc" id="L38">            return false;</span>
+        } else {
+<span class="fc" id="L40">            Producto linea = new Producto(producto.getSku(), producto.getNombre(), producto.getPrecio(), cantidad, producto.getCategoria(), producto.isEsActivo(), producto.isDescuentoAplicable());</span>
+<span class="fc" id="L41">            detallesPedido.add(linea);</span>
+<span class="fc" id="L42">            return true;</span>
+        }
+    }
+
+    public boolean validarStock() {
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for (Producto p : detallesPedido) {</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">            if (p == null) return false;</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            if (p.getCantidad() &lt;= 0) return false;</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
